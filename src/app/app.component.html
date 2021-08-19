@@ -1,0 +1,76 @@
+
+<div class="container-fluid" >
+
+<div *ngIf="error" class="alert alert-danger" role="alert">
+  {{error}}
+</div>
+
+<p *ngIf="isLoading && !error">Loading...</p>
+
+<div class="container mt-4" *ngIf="!isLoading">
+  <div class="row" *ngIf="cards">
+    <div  class="col-sm-12 col-md-3" *ngFor="let card of cards; let i = index">
+      <div class="card border-secondary mb-3" style="max-width: 18rem;">
+        <div class="card-header">{{card.header}}
+
+          <div *ngIf="clearing" class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
+            <span class="sr-only"></span>
+          </div>
+
+        </div>
+        <div class="card-body text-secondary">
+
+
+          <h5 class="card-title">{{card.title}}</h5>
+          <p class="card-text">{{card.disc | shortener:card.title.length}}</p>
+
+
+          <button *ngIf="!deletingItem" class="btn btn-outline-danger" (click)="onDelete(card.id, i)">Delete</button>
+
+          <button *ngIf="idGot === i" class="btn btn-outline-danger" type="button" disabled>
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          </button>
+
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="loadingItem" class="col-sm-12 col-md-3" style="display: flex; align-items: center; justify-content: center;">
+      <div class="spinner-border text-dark" role="status">
+        <span class="sr-only"></span>
+      </div>
+    </div>
+
+
+
+  </div>
+</div>
+
+
+
+
+<hr>
+<div class="container" style="display: flex; justify-content: center;">
+
+  <button *ngIf="!add" class="btn btn-outline-success" (click)="add = !add">Add Card</button>
+
+  <button *ngIf="add" class="btn btn-outline-dark" (click)="add = !add">Close</button>
+
+  <button style="margin-left: 5px;" class="btn btn-outline-warning" (click)="onClear()">Delete All</button>
+</div>
+<hr>
+
+<div *ngIf="add" class="container">
+  <h2 class="lead">Add Card</h2>
+  <form (ngSubmit)="onSubmit(f)" class="form-group" #f="ngForm">
+    <input ngModel type="text" class="form-control" placeholder="Header" name="header" required>
+    <input ngModel type="text" class="form-control mt-1" placeholder="Title" name="title" required>
+    <textarea ngModel name="disc" placeholder="Description" class="form-control mt-1" cols="5" required></textarea>
+
+
+    <button [disabled]="!f.valid"  style="width: 100%;" class="btn btn-success mt-1" type="submit">Add</button>
+  </form>
+</div>
+
+
+</div>
